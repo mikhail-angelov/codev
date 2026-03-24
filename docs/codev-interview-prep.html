@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codev — Technical Interview Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #f5f2ed;
+  --bg2:      #ede9e2;
+  --bg3:      #e4dfd6;
+  --surface:  #faf8f5;
+  --border:   rgba(0,0,0,0.08);
+  --border2:  rgba(0,0,0,0.14);
+  --text0:    #1a1714;
+  --text1:    #4a4540;
+  --text2:    #8a8278;
+  --text3:    #b0a89e;
+  --amber:    #c8810a;
+  --amber-bg: #fff5e0;
+  --amber-mid:#f5a623;
+  --green:    #1a7a4a;
+  --green-bg: #e8f5ee;
+  --red:      #c0392b;
+  --red-bg:   #fdf0ee;
+  --blue:     #2563a8;
+  --blue-bg:  #eaf0fa;
+  --code-bg:  #1e1c18;
+  --code-text:#e8e4dc;
+  --code-dim: #8a8070;
+  --code-amber:#f5a623;
+  --code-green:#4ec994;
+  --code-blue: #79b8ff;
+  --code-red:  #f97583;
+  --radius:   10px;
+  --radius-lg:16px;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --display: 'Fraunces', serif;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text0);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Top nav ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(245,242,237,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex; align-items: center; gap: 24px;
+  height: 54px;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--text0);
+  letter-spacing: -0.02em;
+  margin-right: 8px;
+}
+.nav-logo em { font-style: italic; color: var(--amber); }
+.nav-sep { width: 1px; height: 20px; background: var(--border2); }
+.nav-track {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-track-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber-mid); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.xp-bar-wrap {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--text2);
+}
+.xp-bar {
+  width: 80px; height: 5px;
+  background: var(--bg3);
+  border-radius: 3px; overflow: hidden;
+}
+.xp-fill {
+  height: 100%; border-radius: 3px;
+  background: var(--amber-mid);
+  transition: width .6s ease;
+}
+.streak-badge {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 500;
+  background: var(--amber-bg);
+  color: var(--amber);
+  padding: 4px 10px; border-radius: 20px;
+  border: 1px solid rgba(200,129,10,0.15);
+}
+
+/* ── Main layout ── */
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 320px;
+  gap: 0;
+  min-height: calc(100vh - 54px);
+}
+
+/* ── Left sidebar ── */
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  background: var(--surface);
+  overflow-y: auto;
+}
+.sidebar-section { margin-bottom: 8px; }
+.sidebar-heading {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text3);
+  padding: 6px 20px 4px;
+}
+.topic-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background .12s;
+  border-left: 2px solid transparent;
+}
+.topic-item:hover { background: var(--bg2); }
+.topic-item.active {
+  background: var(--amber-bg);
+  border-left-color: var(--amber);
+}
+.topic-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  background: var(--bg2);
+}
+.topic-item.active .topic-icon { background: rgba(200,129,10,0.12); }
+.topic-name { font-size: 13px; font-weight: 400; color: var(--text0); flex: 1; }
+.topic-count {
+  font-size: 11px; font-family: var(--mono);
+  color: var(--text3); background: var(--bg2);
+  padding: 1px 6px; border-radius: 4px;
+}
+.topic-item.active .topic-count { background: rgba(200,129,10,0.15); color: var(--amber); }
+
+.progress-section {
+  margin: 16px 16px 0;
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+.progress-title { font-size: 11px; font-weight: 500; color: var(--text2); margin-bottom: 10px; }
+.progress-bars { display: flex; flex-direction: column; gap: 8px; }
+.pbar-row { display: flex; align-items: center; gap: 8px; }
+.pbar-label { font-size: 11px; color: var(--text1); width: 90px; flex-shrink: 0; }
+.pbar-track { flex: 1; height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
+.pbar-fill { height: 100%; border-radius: 2px; }
+.pbar-pct { font-size: 11px; font-family: var(--mono); color: var(--text2); width: 30px; text-align: right; }
+
+/* ── Center: Problem panel ── */
+.main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: calc(100vh - 54px);
+}
+
+.problem-header {
+  padding: 20px 28px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.problem-meta {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.diff-badge {
+  font-size: 11px; font-weight: 500;
+  padding: 2px 9px; border-radius: 20px;
+}
+.diff-easy { background: var(--green-bg); color: var(--green); }
+.diff-medium { background: var(--amber-bg); color: var(--amber); }
+.diff-hard { background: var(--red-bg); color: var(--red); }
+.topic-tag {
+  font-size: 11px; font-weight: 400;
+  padding: 2px 8px; border-radius: 20px;
+  background: var(--bg3); color: var(--text1);
+  border: 1px solid var(--border);
+}
+.timer-badge {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  color: var(--text1);
+  background: var(--bg2);
+  padding: 4px 12px; border-radius: 20px;
+  border: 1px solid var(--border);
+}
+.timer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber-mid); animation: blink 1s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.timer-badge.warning { color: var(--red); border-color: rgba(192,57,43,0.2); }
+.timer-badge.warning .timer-dot { background: var(--red); }
+
+.problem-title {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text0);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.problem-number { color: var(--text3); font-style: italic; }
+
+/* Problem tabs */
+.problem-tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  background: var(--surface);
+}
+.ptab {
+  font-size: 12px; font-weight: 500;
+  padding: 10px 14px;
+  border: none; background: transparent;
+  color: var(--text2); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all .15s;
+  font-family: var(--sans);
+}
+.ptab:hover { color: var(--text0); }
+.ptab.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* Scrollable content area */
+.content-split {
+  flex: 1;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+}
+.problem-body {
+  padding: 24px 28px;
+  overflow-y: auto;
+  background: var(--bg);
+}
+.problem-body::-webkit-scrollbar { width: 4px; }
+.problem-body::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+
+.problem-desc {
+  font-size: 14px; color: var(--text1);
+  line-height: 1.75; margin-bottom: 20px;
+  max-width: 620px;
+}
+.problem-desc strong { color: var(--text0); font-weight: 500; }
+
+.examples-section { margin-bottom: 20px; }
+.examples-title { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text2); margin-bottom: 10px; }
+.example-block {
+  background: var(--code-bg);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+.example-label { color: var(--code-dim); font-size: 11px; margin-bottom: 4px; }
+.example-in { color: var(--code-blue); }
+.example-out { color: var(--code-green); }
+
+.constraints-section { margin-bottom: 20px; }
+.constraints-title { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text2); margin-bottom: 10px; }
+.constraint-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; color: var(--text1);
+  margin-bottom: 5px; font-family: var(--mono);
+}
+.constraint-bullet { color: var(--amber); margin-top: 2px; flex-shrink: 0; }
+
+/* Code editor */
+.editor-section {
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  background: var(--code-bg);
+}
+.editor-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.editor-lang-badge {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 4px;
+  background: rgba(245,166,35,0.15); color: var(--code-amber);
+  border: 1px solid rgba(245,166,35,0.2);
+}
+.editor-actions { margin-left: auto; display: flex; gap: 6px; }
+.editor-btn {
+  font-size: 11px; font-weight: 500;
+  padding: 4px 12px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent; color: rgba(232,228,220,0.7);
+  cursor: pointer; font-family: var(--sans);
+  transition: all .15s;
+}
+.editor-btn:hover { background: rgba(255,255,255,0.06); color: var(--code-text); }
+.editor-btn.primary {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: white;
+}
+.editor-btn.primary:hover { background: #b5720a; }
+.editor-btn.primary:active { transform: scale(0.97); }
+
+.code-area {
+  font-family: var(--mono); font-size: 13px;
+  background: transparent; border: none; outline: none;
+  color: var(--code-text); resize: none;
+  padding: 16px 18px;
+  min-height: 200px;
+  line-height: 1.7;
+  tab-size: 2;
+  width: 100%;
+}
+.code-area::placeholder { color: var(--code-dim); }
+
+/* ── Right: AI panel ── */
+.ai-panel {
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  background: var(--surface);
+  overflow: hidden;
+}
+.ai-header {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.ai-header-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ai-title {
+  font-family: var(--display);
+  font-size: 16px; font-weight: 400;
+  color: var(--text0); letter-spacing: -0.01em;
+}
+.ai-status {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--text2);
+  margin-left: auto;
+}
+.ai-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bg3); }
+.ai-status-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); animation: blink 2s infinite; }
+
+.hint-buttons {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.hint-btn {
+  font-size: 11px; font-weight: 500;
+  padding: 5px 11px; border-radius: 6px;
+  border: 1px solid var(--border2);
+  background: var(--bg2); color: var(--text1);
+  cursor: pointer; font-family: var(--sans);
+  transition: all .15s;
+}
+.hint-btn:hover { border-color: var(--amber); color: var(--amber); background: var(--amber-bg); }
+.hint-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.ai-messages {
+  flex: 1; overflow-y: auto;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.ai-messages::-webkit-scrollbar { width: 4px; }
+.ai-messages::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+
+.ai-message {
+  font-size: 13px; line-height: 1.7;
+  animation: fadeUp .3s ease-out;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+.msg-system {
+  color: var(--text2);
+  font-style: italic;
+  text-align: center;
+  font-size: 12px;
+  padding: 8px 0;
+}
+
+.msg-bubble {
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+.msg-ai {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text0);
+}
+.msg-ai .msg-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--amber);
+  margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
+}
+.msg-ai code {
+  font-family: var(--mono); font-size: 12px;
+  background: var(--bg3); padding: 1px 5px; border-radius: 3px;
+  color: var(--amber);
+}
+.msg-ai pre {
+  font-family: var(--mono); font-size: 12px;
+  background: var(--code-bg); color: var(--code-text);
+  padding: 10px 12px; border-radius: 7px;
+  margin: 8px 0; overflow-x: auto;
+  line-height: 1.6;
+}
+.msg-user {
+  background: var(--amber-bg);
+  border: 1px solid rgba(200,129,10,0.15);
+  color: var(--text0);
+  align-self: flex-end;
+}
+.msg-user .msg-label { font-size: 10px; font-weight: 500; color: var(--amber); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.msg-score {
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.msg-score-header {
+  padding: 10px 14px;
+  background: var(--bg2);
+  display: flex; align-items: center; gap: 10px;
+}
+.score-circle {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 15px; font-weight: 500;
+  flex-shrink: 0;
+}
+.score-great { background: var(--green-bg); color: var(--green); border: 2px solid var(--green); }
+.score-ok { background: var(--amber-bg); color: var(--amber); border: 2px solid var(--amber); }
+.score-low { background: var(--red-bg); color: var(--red); border: 2px solid var(--red); }
+.score-title { font-weight: 500; font-size: 13px; color: var(--text0); }
+.score-subtitle { font-size: 11px; color: var(--text2); }
+.score-metrics {
+  padding: 10px 14px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+}
+.score-metric { font-size: 11px; }
+.score-metric-label { color: var(--text2); }
+.score-metric-val { font-weight: 500; color: var(--text0); font-family: var(--mono); }
+
+.typing-indicator {
+  display: flex; align-items: center; gap: 5px;
+  padding: 10px 14px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: fit-content;
+}
+.typing-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--text3);
+  animation: typingBounce .8s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: .15s; }
+.typing-dot:nth-child(3) { animation-delay: .3s; }
+@keyframes typingBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px); background:var(--amber); } }
+
+/* Input area */
+.ai-input-area {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: flex-end;
+  flex-shrink: 0;
+}
+.ai-input {
+  flex: 1; font-family: var(--sans); font-size: 13px;
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: var(--radius); color: var(--text0);
+  padding: 8px 12px; outline: none; resize: none;
+  min-height: 38px; max-height: 100px;
+  transition: border-color .15s; line-height: 1.5;
+}
+.ai-input::placeholder { color: var(--text3); }
+.ai-input:focus { border-color: var(--amber); }
+.ai-send-btn {
+  width: 36px; height: 36px; border-radius: 8px;
+  border: 1px solid var(--amber);
+  background: var(--amber); color: white;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .15s; flex-shrink: 0;
+}
+.ai-send-btn:hover { background: #b5720a; }
+.ai-send-btn:active { transform: scale(0.95); }
+.ai-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Problem select screen */
+.problem-select {
+  padding: 24px 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+.ps-heading {
+  font-family: var(--display);
+  font-size: 26px; font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--text0); margin-bottom: 4px;
+}
+.ps-heading em { font-style: italic; color: var(--amber); }
+.ps-sub { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
+.ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ps-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+}
+.ps-card:hover { border-color: var(--amber); background: var(--amber-bg); transform: translateY(-1px); }
+.ps-card-num { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+.ps-card-title { font-size: 14px; font-weight: 500; color: var(--text0); margin-bottom: 5px; line-height: 1.3; }
+.ps-card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.ps-card-diff { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 10px; }
+.ps-card-topic { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: var(--bg3); color: var(--text1); border: 1px solid var(--border); }
+.ps-card-arrow { position: absolute; top: 16px; right: 16px; color: var(--text3); font-size: 16px; }
+
+/* Animations */
+.fade-in { animation: fadeIn .4s ease-out; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+
+/* Scrollable problem view hidden by default */
+#problemView { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+#selectView { display: flex; flex-direction: column; flex: 1; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">co<em>dev</em></div>
+  <div class="nav-sep"></div>
+  <div class="nav-track">
+    <div class="nav-track-dot"></div>
+    <span id="navTrack">Select a problem</span>
+  </div>
+  <div class="nav-right">
+    <div class="xp-bar-wrap">
+      <span>XP</span>
+      <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:35%"></div></div>
+      <span id="xpVal">350</span>
+    </div>
+    <div class="streak-badge">🔥 <span id="streakVal">3</span> day streak</div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Topics</div>
+      <div class="topic-item active" onclick="filterTopic('Arrays',this)">
+        <div class="topic-icon">⬡</div>
+        <div class="topic-name">Arrays</div>
+        <div class="topic-count">12</div>
+      </div>
+      <div class="topic-item" onclick="filterTopic('Strings',this)">
+        <div class="topic-icon">∿</div>
+        <div class="topic-name">Strings</div>
+        <div class="topic-count">9</div>
+      </div>
+      <div class="topic-item" onclick="filterTopic('Trees',this)">
+        <div class="topic-icon">⋔</div>
+        <div class="topic-name">Trees</div>
+        <div class="topic-count">11</div>
+      </div>
+      <div class="topic-item" onclick="filterTopic('Dynamic Prog',this)">
+        <div class="topic-icon">◈</div>
+        <div class="topic-name">Dynamic Prog.</div>
+        <div class="topic-count">14</div>
+      </div>
+      <div class="topic-item" onclick="filterTopic('Graphs',this)">
+        <div class="topic-icon">◎</div>
+        <div class="topic-name">Graphs</div>
+        <div class="topic-count">8</div>
+      </div>
+      <div class="topic-item" onclick="filterTopic('Linked Lists',this)">
+        <div class="topic-icon">⊸</div>
+        <div class="topic-name">Linked Lists</div>
+        <div class="topic-count">7</div>
+      </div>
+      <div class="topic-item" onclick="filterTopic('Recursion',this)">
+        <div class="topic-icon">↻</div>
+        <div class="topic-name">Recursion</div>
+        <div class="topic-count">6</div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-title">Your progress</div>
+      <div class="progress-bars">
+        <div class="pbar-row">
+          <div class="pbar-label">Easy</div>
+          <div class="pbar-track"><div class="pbar-fill" style="width:70%;background:#1a7a4a"></div></div>
+          <div class="pbar-pct">70%</div>
+        </div>
+        <div class="pbar-row">
+          <div class="pbar-label">Medium</div>
+          <div class="pbar-track"><div class="pbar-fill" style="width:42%;background:var(--amber-mid)"></div></div>
+          <div class="pbar-pct">42%</div>
+        </div>
+        <div class="pbar-row">
+          <div class="pbar-label">Hard</div>
+          <div class="pbar-track"><div class="pbar-fill" style="width:18%;background:var(--red)"></div></div>
+          <div class="pbar-pct">18%</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main area -->
+  <main class="main">
+
+    <!-- Problem select view -->
+    <div id="selectView">
+      <div class="problem-select fade-in">
+        <div class="ps-heading">Ready to <em>practice?</em></div>
+        <div class="ps-sub">Pick a problem and solve it with live AI feedback.</div>
+        <div class="ps-grid" id="problemGrid">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Problem solving view -->
+    <div id="problemView">
+      <div class="problem-header">
+        <div class="problem-meta">
+          <span class="diff-badge" id="diffBadge"></span>
+          <span class="topic-tag" id="topicTag"></span>
+          <div class="timer-badge" id="timerBadge">
+            <div class="timer-dot"></div>
+            <span id="timerVal">25:00</span>
+          </div>
+        </div>
+        <div class="problem-title"><span class="problem-number" id="problemNum"></span> <span id="problemTitle"></span></div>
+      </div>
+
+      <div class="problem-tabs">
+        <button class="ptab active" onclick="showPTab('desc',this)">Description</button>
+        <button class="ptab" onclick="showPTab('hints',this)">Hints</button>
+        <button class="ptab" onclick="showPTab('solution',this)">Solution</button>
+      </div>
+
+      <div class="content-split">
+        <div class="problem-body" id="problemBody">
+          <!-- filled dynamically -->
+        </div>
+
+        <div class="editor-section">
+          <div class="editor-header">
+            <div class="editor-lang-badge">JavaScript</div>
+            <div style="font-size:11px;color:var(--code-dim);font-family:var(--mono);margin-left:8px;" id="charCount">0 chars</div>
+            <div class="editor-actions">
+              <button class="editor-btn" onclick="resetCode()">Reset</button>
+              <button class="editor-btn" onclick="runTests()">Run tests</button>
+              <button class="editor-btn primary" onclick="submitSolution()">Submit & review →</button>
+            </div>
+          </div>
+          <textarea class="code-area" id="codeEditor" placeholder="// Write your solution here..." spellcheck="false" oninput="onCodeInput()"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- AI panel -->
+  <aside class="ai-panel">
+    <div class="ai-header">
+      <div class="ai-header-top">
+        <div class="ai-title">AI Interviewer</div>
+        <div class="ai-status">
+          <div class="ai-status-dot" id="aiDot"></div>
+          <span id="aiStatusText">Ready</span>
+        </div>
+      </div>
+      <div class="hint-buttons">
+        <button class="hint-btn" onclick="askHint('approach')">Hint: approach</button>
+        <button class="hint-btn" onclick="askHint('complexity')">Time complexity</button>
+        <button class="hint-btn" onclick="askHint('edge')">Edge cases</button>
+        <button class="hint-btn" onclick="askHint('explain')">Explain my code</button>
+      </div>
+    </div>
+    <div class="ai-messages" id="aiMessages">
+      <div class="msg-system">AI interviewer is ready. Select a problem to start.</div>
+    </div>
+    <div class="ai-input-area">
+      <textarea class="ai-input" id="aiInput" placeholder="Ask the interviewer anything..." rows="1" onkeydown="onAiInputKey(event)"></textarea>
+      <button class="ai-send-btn" id="aiSendBtn" onclick="sendMessage()" disabled>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+const PROBLEMS = [
+  {
+    id: 1,
+    title: "Two Sum",
+    difficulty: "easy",
+    topic: "Arrays",
+    timeLimit: 25,
+    description: `Given an array of integers <strong>nums</strong> and an integer <strong>target</strong>, return the indices of the two numbers that add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.`,
+    examples: [
+      { input: "nums = [2,7,11,15], target = 9", output: "[0,1]", note: "nums[0] + nums[1] = 2 + 7 = 9" },
+      { input: "nums = [3,2,4], target = 6", output: "[1,2]" },
+    ],
+    constraints: ["2 ≤ nums.length ≤ 10⁴", "-10⁹ ≤ nums[i] ≤ 10⁹", "Only one valid answer exists"],
+    hints: ["Try using a hash map to store complements.", "For each number, check if (target - num) already exists in the map.", "O(n) time is achievable with one pass."],
+    starter: `/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nfunction twoSum(nums, target) {\n  \n};`,
+    solution: `function twoSum(nums, target) {\n  const map = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) {\n      return [map.get(complement), i];\n    }\n    map.set(nums[i], i);\n  }\n};`,
+  },
+  {
+    id: 15,
+    title: "Longest Substring Without Repeating Characters",
+    difficulty: "medium",
+    topic: "Strings",
+    timeLimit: 35,
+    description: `Given a string <strong>s</strong>, find the length of the <strong>longest substring</strong> without repeating characters.\n\nA substring is a contiguous sequence of characters within the string.`,
+    examples: [
+      { input: 's = "abcabcbb"', output: "3", note: 'The answer is "abc", with length 3' },
+      { input: 's = "bbbbb"', output: "1", note: 'The answer is "b", with length 1' },
+      { input: 's = "pwwkew"', output: "3", note: '"wke" has length 3' },
+    ],
+    constraints: ["0 ≤ s.length ≤ 5 × 10⁴", "s consists of printable ASCII characters"],
+    hints: ["Sliding window technique works well here.", "Use a Set or Map to track characters in the current window.", "Expand right, shrink left when a duplicate is found."],
+    starter: `/**\n * @param {string} s\n * @return {number}\n */\nfunction lengthOfLongestSubstring(s) {\n  \n};`,
+    solution: `function lengthOfLongestSubstring(s) {\n  const set = new Set();\n  let left = 0, max = 0;\n  for (let right = 0; right < s.length; right++) {\n    while (set.has(s[right])) {\n      set.delete(s[left++]);\n    }\n    set.add(s[right]);\n    max = Math.max(max, right - left + 1);\n  }\n  return max;\n};`,
+  },
+  {
+    id: 23,
+    title: "Maximum Depth of Binary Tree",
+    difficulty: "easy",
+    topic: "Trees",
+    timeLimit: 20,
+    description: `Given the <strong>root</strong> of a binary tree, return its maximum depth.\n\nThe maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.`,
+    examples: [
+      { input: "root = [3,9,20,null,null,15,7]", output: "3" },
+      { input: "root = [1,null,2]", output: "2" },
+    ],
+    constraints: ["0 ≤ number of nodes ≤ 10⁴", "-100 ≤ Node.val ≤ 100"],
+    hints: ["Think recursively: what is the depth of a null node?", "The depth of any node is 1 + max(left depth, right depth).", "Can also be solved iteratively with a queue (BFS)."],
+    starter: `/**\n * @param {TreeNode} root\n * @return {number}\n */\nfunction maxDepth(root) {\n  \n};`,
+    solution: `function maxDepth(root) {\n  if (!root) return 0;\n  return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));\n};`,
+  },
+  {
+    id: 42,
+    title: "Coin Change",
+    difficulty: "medium",
+    topic: "Dynamic Prog.",
+    timeLimit: 40,
+    description: `You are given an integer array <strong>coins</strong> representing coins of different denominations and an integer <strong>amount</strong>.\n\nReturn the fewest number of coins needed to make up that amount. If that amount cannot be made up, return <strong>-1</strong>.\n\nYou may assume you have an infinite number of each coin.`,
+    examples: [
+      { input: "coins = [1,5,10,25], amount = 41", output: "4", note: "25 + 10 + 5 + 1 = 41" },
+      { input: "coins = [2], amount = 3", output: "-1" },
+      { input: "coins = [1], amount = 0", output: "0" },
+    ],
+    constraints: ["1 ≤ coins.length ≤ 12", "1 ≤ coins[i] ≤ 2³¹ − 1", "0 ≤ amount ≤ 10⁴"],
+    hints: ["Classic bottom-up DP problem.", "Build a dp[] array of size amount+1.", "dp[i] = min coins to make amount i."],
+    starter: `/**\n * @param {number[]} coins\n * @param {number} amount\n * @return {number}\n */\nfunction coinChange(coins, amount) {\n  \n};`,
+    solution: `function coinChange(coins, amount) {\n  const dp = new Array(amount + 1).fill(Infinity);\n  dp[0] = 0;\n  for (let i = 1; i <= amount; i++) {\n    for (const coin of coins) {\n      if (coin <= i) dp[i] = Math.min(dp[i], dp[i - coin] + 1);\n    }\n  }\n  return dp[amount] === Infinity ? -1 : dp[amount];\n};`,
+  },
+  {
+    id: 57,
+    title: "Merge K Sorted Lists",
+    difficulty: "hard",
+    topic: "Linked Lists",
+    timeLimit: 45,
+    description: `You are given an array of <strong>k</strong> linked-lists, each sorted in ascending order.\n\nMerge all linked-lists into one sorted linked-list and return it.`,
+    examples: [
+      { input: "lists = [[1,4,5],[1,3,4],[2,6]]", output: "[1,1,2,3,4,4,5,6]" },
+      { input: "lists = []", output: "[]" },
+    ],
+    constraints: ["0 ≤ k ≤ 10⁴", "0 ≤ lists[i].length ≤ 500", "Lists are sorted in ascending order"],
+    hints: ["Divide and conquer: merge pairs of lists.", "Merging two sorted lists is O(n+m) — use that as a building block.", "Total complexity: O(N log k) where N = total nodes."],
+    starter: `/**\n * @param {ListNode[]} lists\n * @return {ListNode}\n */\nfunction mergeKLists(lists) {\n  \n};`,
+    solution: `function mergeKLists(lists) {\n  if (!lists.length) return null;\n  function merge(l1, l2) {\n    const dummy = new ListNode(0);\n    let cur = dummy;\n    while (l1 && l2) {\n      if (l1.val <= l2.val) { cur.next = l1; l1 = l1.next; }\n      else { cur.next = l2; l2 = l2.next; }\n      cur = cur.next;\n    }\n    cur.next = l1 || l2;\n    return dummy.next;\n  }\n  while (lists.length > 1) {\n    const merged = [];\n    for (let i = 0; i < lists.length; i += 2)\n      merged.push(merge(lists[i], lists[i+1] || null));\n    lists = merged;\n  }\n  return lists[0];\n};`,
+  },
+  {
+    id: 63,
+    title: "Number of Islands",
+    difficulty: "medium",
+    topic: "Graphs",
+    timeLimit: 35,
+    description: `Given an <strong>m x n</strong> 2D binary grid where <strong>'1'</strong> is land and <strong>'0'</strong> is water, return the number of islands.\n\nAn island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.`,
+    examples: [
+      { input: 'grid = [["1","1","0"],["0","1","0"],["0","0","1"]]', output: "2" },
+      { input: 'grid = [["1","1","1"],["0","1","0"],["1","1","1"]]', output: "1" },
+    ],
+    constraints: ["m == grid.length", "n == grid[i].length", "1 ≤ m, n ≤ 300", "grid[i][j] is '0' or '1'"],
+    hints: ["Use DFS or BFS to explore each island.", "Mark visited cells to avoid counting them again.", "Each time you start a DFS on an unvisited '1', increment your count."],
+    starter: `/**\n * @param {character[][]} grid\n * @return {number}\n */\nfunction numIslands(grid) {\n  \n};`,
+    solution: `function numIslands(grid) {\n  let count = 0;\n  function dfs(r, c) {\n    if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] !== '1') return;\n    grid[r][c] = '0';\n    dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1);\n  }\n  for (let r = 0; r < grid.length; r++)\n    for (let c = 0; c < grid[0].length; c++)\n      if (grid[r][c] === '1') { dfs(r,c); count++; }\n  return count;\n};`,
+  },
+];
+
+let currentProblem = null;
+let timerInterval = null;
+let timeLeft = 0;
+let aiLoading = false;
+let hintIdx = 0;
+let currentTab = 'desc';
+
+// ── Render problem grid ──
+function renderGrid() {
+  const grid = document.getElementById('problemGrid');
+  grid.innerHTML = PROBLEMS.map(p => `
+    <div class="ps-card" onclick="loadProblem(${p.id})">
+      <div class="ps-card-num">#${String(p.id).padStart(2,'0')}</div>
+      <div class="ps-card-title">${p.title}</div>
+      <div class="ps-card-tags">
+        <span class="ps-card-diff diff-${p.difficulty}">${p.difficulty}</span>
+        <span class="ps-card-topic">${p.topic}</span>
+      </div>
+      <div class="ps-card-arrow">›</div>
+    </div>
+  `).join('');
+}
+
+function filterTopic(topic, el) {
+  document.querySelectorAll('.topic-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── Load problem ──
+function loadProblem(id) {
+  const p = PROBLEMS.find(x => x.id === id);
+  if (!p) return;
+  currentProblem = p;
+  hintIdx = 0;
+
+  document.getElementById('selectView').style.display = 'none';
+  const pv = document.getElementById('problemView');
+  pv.style.display = 'flex';
+  pv.classList.add('fade-in');
+
+  document.getElementById('navTrack').textContent = p.title;
+  document.getElementById('diffBadge').textContent = p.difficulty;
+  document.getElementById('diffBadge').className = `diff-badge diff-${p.difficulty}`;
+  document.getElementById('topicTag').textContent = p.topic;
+  document.getElementById('problemNum').textContent = `#${p.id}`;
+  document.getElementById('problemTitle').textContent = p.title;
+  document.getElementById('codeEditor').value = p.starter;
+  updateCharCount();
+
+  showPTab('desc', document.querySelector('.ptab'));
+  startTimer(p.timeLimit * 60);
+  document.getElementById('aiSendBtn').disabled = false;
+
+  clearMessages();
+  addSystemMessage(`Problem loaded: "${p.title}". Good luck! I'm here to help.`);
+
+  setTimeout(() => addAIMessage(`Let's work on **${p.title}**. It's a ${p.difficulty} ${p.topic} problem with a ${p.timeLimit}-minute target.\n\nTake a moment to read the problem carefully before jumping to code. What's your initial approach?`), 600);
+}
+
+// ── Timer ──
+function startTimer(seconds) {
+  clearInterval(timerInterval);
+  timeLeft = seconds;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) { clearInterval(timerInterval); }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  const val = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('timerVal').textContent = val;
+  const badge = document.getElementById('timerBadge');
+  badge.className = 'timer-badge' + (timeLeft < 180 ? ' warning' : '');
+}
+
+// ── Problem tabs ──
+function showPTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const body = document.getElementById('problemBody');
+
+  if (tab === 'desc') {
+    renderDesc();
+  } else if (tab === 'hints') {
+    renderHints();
+  } else if (tab === 'solution') {
+    renderSolution();
+  }
+}
+
+function renderDesc() {
+  if (!currentProblem) return;
+  const p = currentProblem;
+  let html = `<p class="problem-desc">${p.description.replace(/\n/g,'<br><br>')}</p>`;
+  html += `<div class="examples-section"><div class="examples-title">Examples</div>`;
+  p.examples.forEach((ex, i) => {
+    html += `<div class="example-block">
+      <div class="example-label">Example ${i+1}</div>
+      <div class="example-in">Input: ${ex.input}</div>
+      <div class="example-out">Output: ${ex.output}</div>
+      ${ex.note ? `<div style="color:var(--code-dim);margin-top:3px;font-size:11px;">${ex.note}</div>` : ''}
+    </div>`;
+  });
+  html += `</div><div class="constraints-section"><div class="constraints-title">Constraints</div>`;
+  p.constraints.forEach(c => {
+    html += `<div class="constraint-item"><span class="constraint-bullet">·</span>${c}</div>`;
+  });
+  html += `</div>`;
+  document.getElementById('problemBody').innerHTML = html;
+}
+
+function renderHints() {
+  if (!currentProblem) return;
+  const p = currentProblem;
+  let html = `<div style="display:flex;flex-direction:column;gap:10px;">`;
+  p.hints.forEach((h, i) => {
+    html += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;">
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--amber);margin-bottom:5px;">Hint ${i+1}</div>
+      <div style="font-size:13px;color:var(--text1);">${h}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  document.getElementById('problemBody').innerHTML = html;
+}
+
+function renderSolution() {
+  if (!currentProblem) return;
+  let html = `<div style="margin-bottom:14px;padding:12px 14px;background:var(--amber-bg);border:1px solid rgba(200,129,10,0.15);border-radius:var(--radius);font-size:12px;color:var(--amber);">
+    <strong>Spoiler warning.</strong> Try to solve it yourself first — the learning is in the struggle.
+  </div>
+  <div class="example-block"><pre style="margin:0;background:transparent;padding:0;color:var(--code-text);">${escHtml(currentProblem.solution)}</pre></div>`;
+  document.getElementById('problemBody').innerHTML = html;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Code editor ──
+function onCodeInput() { updateCharCount(); }
+function updateCharCount() {
+  const len = document.getElementById('codeEditor').value.length;
+  document.getElementById('charCount').textContent = len + ' chars';
+}
+function resetCode() {
+  if (currentProblem) document.getElementById('codeEditor').value = currentProblem.starter;
+  updateCharCount();
+}
+
+function runTests() {
+  if (!currentProblem) return;
+  const code = document.getElementById('codeEditor').value.trim();
+  if (code === currentProblem.starter.trim() || code.length < 20) {
+    addSystemMessage('Write your solution first, then run tests.');
+    return;
+  }
+  addUserMessage('Running test cases...');
+  addSystemMessage('Running 3 test cases...');
+  setTimeout(() => {
+    const passed = Math.random() > 0.3 ? 2 : 1;
+    const total = 3;
+    addAIMessage(`Test results: **${passed}/${total} passed**.\n\n${passed < total ? "One test is failing. Check your edge cases — what happens with an empty input or very large values?" : "Looking good! Now think about your time and space complexity before submitting."}`);
+  }, 800);
+}
+
+// ── Submit & AI review ──
+async function submitSolution() {
+  if (!currentProblem || aiLoading) return;
+  const code = document.getElementById('codeEditor').value.trim();
+  if (code === currentProblem.starter.trim() || code.length < 30) {
+    addSystemMessage('Please write a solution before submitting.');
+    return;
+  }
+
+  const elapsed = (currentProblem.timeLimit * 60) - timeLeft;
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+
+  addUserMessage(`Submitting solution (solved in ${mins}m ${secs}s)`);
+  await callAI([{
+    role: 'user',
+    content: `You are a senior technical interviewer reviewing a coding solution. Be honest, direct, and helpful.
+
+Problem: "${currentProblem.title}" (${currentProblem.difficulty}, ${currentProblem.topic})
+
+Problem description: ${currentProblem.description.replace(/<[^>]+>/g,'')}
+
+Candidate's solution:
+\`\`\`javascript
+${code}
+\`\`\`
+
+Time taken: ${mins} minutes ${secs} seconds (limit was ${currentProblem.timeLimit} min)
+
+Please provide:
+1. A brief correctness assessment (does it solve the problem?)
+2. Time complexity (Big-O)
+3. Space complexity (Big-O)
+4. 1-2 specific improvements or alternative approaches
+5. One follow-up interview question to probe deeper
+
+Be conversational and encouraging but honest. Keep it under 200 words.`
+  }], true);
+}
+
+// ── Hint buttons ──
+async function askHint(type) {
+  if (!currentProblem || aiLoading) return;
+  const code = document.getElementById('codeEditor').value.trim();
+  const prompts = {
+    approach: `Give me a high-level hint for approaching "${currentProblem.title}" without spoiling the solution. Just a nudge in the right direction in 2-3 sentences.`,
+    complexity: `What's the target time and space complexity for "${currentProblem.title}"? And what are the common complexities candidates achieve, from naive to optimal?`,
+    edge: `What are the edge cases I should be thinking about for "${currentProblem.title}"? List 3-4 specific inputs to test.`,
+    explain: `Here's my current code for "${currentProblem.title}":\n\`\`\`javascript\n${code}\n\`\`\`\nExplain what it does step by step and whether the logic is correct.`,
+  };
+  await callAI([{ role:'user', content: prompts[type] }]);
+}
+
+// ── AI chat ──
+function onAiInputKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+async function sendMessage() {
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  if (!text || aiLoading) return;
+  input.value = '';
+  input.style.height = 'auto';
+
+  const context = currentProblem
+    ? `You are a technical interview coach. The candidate is working on: "${currentProblem.title}" (${currentProblem.difficulty} ${currentProblem.topic}). Their current code:\n\`\`\`javascript\n${document.getElementById('codeEditor').value}\n\`\`\`\n\n`
+    : `You are a helpful technical interview coach. `;
+
+  await callAI([{ role:'user', content: context + `Candidate asks: ${text}\n\nRespond helpfully and concisely (under 150 words). Use code blocks for any code.` }]);
+}
+
+async function callAI(messages, isReview = false) {
+  if (aiLoading) return;
+  aiLoading = true;
+  setAiStatus(true);
+
+  const typing = addTypingIndicator();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages,
+      })
+    });
+
+    removeTypingIndicator(typing);
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      addSystemMessage('API error: ' + (err.error?.message || response.status) + '. Check your API key.');
+      return;
+    }
+
+    const data = await response.json();
+    const text = data.content?.find(b => b.type === 'text')?.text || '';
+
+    if (isReview) {
+      addReviewMessage(text);
+      awardXP(30);
+    } else {
+      addAIMessage(text);
+    }
+  } catch (err) {
+    removeTypingIndicator(typing);
+    addSystemMessage('Connection error. Make sure you are running this with a valid Anthropic API key.');
+  } finally {
+    aiLoading = false;
+    setAiStatus(false);
+  }
+}
+
+function setAiStatus(active) {
+  document.getElementById('aiDot').className = 'ai-status-dot' + (active ? ' active' : '');
+  document.getElementById('aiStatusText').textContent = active ? 'Thinking...' : 'Ready';
+  document.getElementById('aiSendBtn').disabled = active;
+}
+
+function addTypingIndicator() {
+  const msgs = document.getElementById('aiMessages');
+  const el = document.createElement('div');
+  el.className = 'ai-message typing-indicator';
+  el.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+  return el;
+}
+
+function removeTypingIndicator(el) { el?.remove(); }
+
+function addAIMessage(text) {
+  const msgs = document.getElementById('aiMessages');
+  const el = document.createElement('div');
+  el.className = 'ai-message msg-bubble msg-ai';
+  el.innerHTML = `<div class="msg-label">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    AI Interviewer
+  </div>${formatMessage(text)}`;
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addUserMessage(text) {
+  const msgs = document.getElementById('aiMessages');
+  const el = document.createElement('div');
+  el.className = 'ai-message msg-bubble msg-user';
+  el.innerHTML = `<div class="msg-label">You</div><div>${escHtml(text)}</div>`;
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addSystemMessage(text) {
+  const msgs = document.getElementById('aiMessages');
+  const el = document.createElement('div');
+  el.className = 'ai-message msg-system';
+  el.textContent = text;
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addReviewMessage(text) {
+  const score = text.includes('correct') || text.includes('well') || text.includes('good') ? 'great' :
+                text.includes('improve') || text.includes('consider') ? 'ok' : 'ok';
+  const msgs = document.getElementById('aiMessages');
+  const el = document.createElement('div');
+  el.className = 'ai-message msg-score';
+  el.innerHTML = `
+    <div class="msg-score-header">
+      <div class="score-circle score-${score}">${score === 'great' ? '✓' : '~'}</div>
+      <div>
+        <div class="score-title">Solution reviewed</div>
+        <div class="score-subtitle">AI feedback below</div>
+      </div>
+    </div>
+    <div style="padding:12px 14px;font-size:13px;line-height:1.7;color:var(--text0);">${formatMessage(text)}</div>
+  `;
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function formatMessage(text) {
+  return text
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+      `<pre>${escHtml(code.trim())}</pre>`)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
+function clearMessages() {
+  document.getElementById('aiMessages').innerHTML = '';
+}
+
+function awardXP(amount) {
+  const fill = document.getElementById('xpFill');
+  const val = document.getElementById('xpVal');
+  let current = parseInt(val.textContent);
+  current += amount;
+  val.textContent = current;
+  const pct = Math.min((current % 1000) / 10, 100);
+  fill.style.width = pct + '%';
+}
+
+// Init
+renderGrid();
+</script>
+</body>
+</html>
