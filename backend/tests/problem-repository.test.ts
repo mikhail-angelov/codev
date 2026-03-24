@@ -35,6 +35,7 @@ describe("problem repository", () => {
       topic: "Strings",
     });
     expect(problem).not.toHaveProperty("referenceSolution");
+    expect(problem?.starterTemplate).toBe("/**\n * @param {string} s\n * @return {number}\n */\nfunction lengthOfLongestSubstring(s) {\n}");
   });
 
   it("returns a public problem detail by slug without leaking internal fields", () => {

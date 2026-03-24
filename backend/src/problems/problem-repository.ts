@@ -1,5 +1,6 @@
 import { problemSeeds } from "./problem-seeds.js";
 import type { ProblemDifficulty, ProblemRecord, ProblemTopic } from "./problem-schema.js";
+import { stripStarterTemplateImplementation } from "./starter-template.js";
 
 export interface ProblemListItem {
   id: number;
@@ -27,7 +28,7 @@ function cloneProblemRecord(problem: ProblemRecord): ProblemRecord {
     ...problem,
     examples: problem.examples.map((example) => ({ ...example })),
     constraints: [...problem.constraints],
-    starterTemplate: problem.starterTemplate,
+    starterTemplate: stripStarterTemplateImplementation(problem.starterTemplate),
     hints: [...problem.hints],
     referenceSolution: problem.referenceSolution,
     sampleTests: problem.sampleTests.map((sampleTest) => ({ ...sampleTest })),

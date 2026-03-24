@@ -85,6 +85,9 @@ describe("problems routes", () => {
       topic: "Strings",
     });
     expect(state.body).not.toHaveProperty("referenceSolution");
+    expect(state.body).toMatchObject({
+      starterTemplate: "/**\n * @param {string} s\n * @return {number}\n */\nfunction lengthOfLongestSubstring(s) {\n}",
+    });
   });
 
   it("returns 404 for an unknown id", () => {

@@ -37,50 +37,22 @@ function WorkspacePanel({
   onSubmitForReview,
 }: WorkspacePanelProps) {
   const displayTitle = problem?.title ?? summary?.title ?? "Workspace Shell";
-  const displayDifficulty = problem?.difficulty ?? summary?.difficulty ?? "medium";
+  const displayDifficulty =
+    problem?.difficulty ?? summary?.difficulty ?? "medium";
   const displayTopic = problem?.topic ?? summary?.topic ?? "Arrays";
   const displayId = problem?.id ?? summary?.id ?? null;
-  const sampleSummaryStatus =
-    !sampleTestSummary
-      ? null
-      : sampleTestSummary.runtimeError
-        ? "errored"
-        : sampleTestSummary.failedCount > 0
-          ? "failed"
-          : sampleTestSummary.passedCount === sampleTestSummary.totalCount
-            ? "passed"
-            : "neutral";
+  const sampleSummaryStatus = !sampleTestSummary
+    ? null
+    : sampleTestSummary.runtimeError
+      ? "errored"
+      : sampleTestSummary.failedCount > 0
+        ? "failed"
+        : sampleTestSummary.passedCount === sampleTestSummary.totalCount
+          ? "passed"
+          : "neutral";
 
   return (
     <section className="workspace-shell ui-panel ui-panel--elevated">
-      <div className="problem-header">
-        <div className="problem-meta">
-          <span className={`diff-badge diff-${displayDifficulty}`}>{displayDifficulty}</span>
-          <span className="topic-tag">{displayTopic}</span>
-          <div className="timer-badge" aria-label={`Elapsed time ${elapsedLabel}`}>
-            <div className="timer-dot" />
-            <span className="timer-label">Elapsed</span>
-            <span>{elapsedLabel}</span>
-          </div>
-        </div>
-        <h2 className="problem-title">
-          <span className="problem-number">{displayId ? `#${String(displayId).padStart(2, "0")}` : "#--"}</span>{" "}
-          {displayTitle}
-        </h2>
-      </div>
-
-      <div className="problem-tabs" aria-label="Problem sections">
-        <button className="ptab active" type="button">
-          Description
-        </button>
-        <button className="ptab" type="button">
-          Hints
-        </button>
-        <button className="ptab" type="button">
-          Solution
-        </button>
-      </div>
-
       <div className="content-split">
         <div className="problem-body">
           {loading ? (
@@ -90,7 +62,11 @@ function WorkspacePanel({
           ) : null}
 
           {error ? (
-            <div className="workspace-state workspace-state--error" role="status" aria-live="polite">
+            <div
+              className="workspace-state workspace-state--error"
+              role="status"
+              aria-live="polite"
+            >
               {error}
             </div>
           ) : null}
@@ -103,37 +79,7 @@ function WorkspacePanel({
 
           {problem ? (
             <>
-              <p className="problem-desc">
-                {problem.description}
-              </p>
-
-              <div className="examples-section">
-                <div className="examples-title">Examples</div>
-                {problem.examples.map((example, index) => (
-                  <div key={`${example.input}-${index}`} className="example-block">
-                    <div className="example-label">Input</div>
-                    <div className="example-in">{example.input}</div>
-                    <div className="example-label">Output</div>
-                    <div className="example-out">{example.output}</div>
-                    {example.note ? (
-                      <>
-                        <div className="example-label">Note</div>
-                        <div className="example-note">{example.note}</div>
-                      </>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-
-              <div className="constraints-section">
-                <div className="constraints-title">Constraints</div>
-                {problem.constraints.map((constraint) => (
-                  <div key={constraint} className="constraint-item">
-                    <span className="constraint-bullet">•</span>
-                    <span>{constraint}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="problem-desc">{problem.description}</p>
             </>
           ) : null}
         </div>
@@ -188,20 +134,28 @@ function WorkspacePanel({
                 bracketMatching: false,
                 indentOnInput: false,
               }}
-              />
-            </div>
+            />
+          </div>
           {sampleTestSummary ? (
-            <div className={`sample-test-summary sample-test-summary--${sampleSummaryStatus ?? "neutral"}`} role="status" aria-live="polite">
+            <div
+              className={`sample-test-summary sample-test-summary--${sampleSummaryStatus ?? "neutral"}`}
+              role="status"
+              aria-live="polite"
+            >
               <div className="sample-test-summary-header">
                 <div>
-                  <div className="sample-test-summary-title">Latest sample test run</div>
+                  <div className="sample-test-summary-title">
+                    Latest sample test run
+                  </div>
                   <div className="sample-test-summary-line">
                     {sampleTestSummary.totalCount === 0
                       ? "No visible sample tests were configured for this problem."
                       : `Passed ${sampleTestSummary.passedCount} · Failed ${sampleTestSummary.failedCount} · Errors ${sampleTestSummary.errorCount}`}
                   </div>
                 </div>
-                <div className={`sample-test-summary-badge sample-test-summary-badge--${sampleSummaryStatus ?? "neutral"}`}>
+                <div
+                  className={`sample-test-summary-badge sample-test-summary-badge--${sampleSummaryStatus ?? "neutral"}`}
+                >
                   {sampleSummaryStatus === "passed"
                     ? "All passed"
                     : sampleSummaryStatus === "failed"
@@ -221,19 +175,28 @@ function WorkspacePanel({
               {sampleTestSummary.results.length > 0 ? (
                 <div className="sample-test-results">
                   {sampleTestSummary.results.map((result) => (
-                    <article key={`${result.index}-${result.input}`} className="sample-test-result ui-card">
+                    <article
+                      key={`${result.index}-${result.input}`}
+                      className="sample-test-result ui-card"
+                    >
                       <div className="sample-test-result-header">
-                        <div className={`sample-test-result-index sample-test-result-index--${result.status}`}>
+                        <div
+                          className={`sample-test-result-index sample-test-result-index--${result.status}`}
+                        >
                           Sample {result.index + 1}
                         </div>
-                        <div className={`sample-test-result-status sample-test-result-status--${result.status}`}>
+                        <div
+                          className={`sample-test-result-status sample-test-result-status--${result.status}`}
+                        >
                           {result.status}
                         </div>
                       </div>
 
                       <div className="sample-test-result-row">
                         <div className="sample-test-result-label">Input</div>
-                        <div className="sample-test-result-value">{result.input}</div>
+                        <div className="sample-test-result-value">
+                          {result.input}
+                        </div>
                       </div>
 
                       <div className="sample-test-result-row">
@@ -243,7 +206,8 @@ function WorkspacePanel({
                         </div>
                       </div>
 
-                      {result.status === "passed" || result.status === "failed" ? (
+                      {result.status === "passed" ||
+                      result.status === "failed" ? (
                         <div className="sample-test-result-row">
                           <div className="sample-test-result-label">Actual</div>
                           <div className="sample-test-result-value sample-test-result-value--code">
@@ -254,7 +218,9 @@ function WorkspacePanel({
 
                       {result.status === "errored" ? (
                         <div className="sample-test-result-row">
-                          <div className="sample-test-result-label">Runtime error</div>
+                          <div className="sample-test-result-label">
+                            Runtime error
+                          </div>
                           <div className="sample-test-result-value sample-test-result-value--error">
                             {result.runtimeError}
                           </div>
@@ -267,6 +233,41 @@ function WorkspacePanel({
             </div>
           ) : null}
         </div>
+
+        {problem ? (
+          <div className="problem-supporting">
+            <div className="examples-section">
+              <div className="examples-title">Examples</div>
+              {problem.examples.map((example, index) => (
+                <div
+                  key={`${example.input}-${index}`}
+                  className="example-block"
+                >
+                  <div className="example-label">Input</div>
+                  <div className="example-in">{example.input}</div>
+                  <div className="example-label">Output</div>
+                  <div className="example-out">{example.output}</div>
+                  {example.note ? (
+                    <>
+                      <div className="example-label">Note</div>
+                      <div className="example-note">{example.note}</div>
+                    </>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+
+            <div className="constraints-section">
+              <div className="constraints-title">Constraints</div>
+              {problem.constraints.map((constraint) => (
+                <div key={constraint} className="constraint-item">
+                  <span className="constraint-bullet">•</span>
+                  <span>{constraint}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );

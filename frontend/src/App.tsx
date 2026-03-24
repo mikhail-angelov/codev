@@ -408,6 +408,12 @@ function App() {
     : selectedProblem
       ? `Selected: ${selectedProblem.title}`
       : "Select a problem to begin";
+  const displayDifficulty = selectedProblem
+      ? `${selectedProblem.difficulty}`
+      : "";
+  const displayTopic = selectedProblem
+      ? ` ${selectedProblem.topic}`
+      : "";
 
   return (
     <div className="app-shell">
@@ -419,8 +425,16 @@ function App() {
         <div className="nav-track">
           <div className="nav-track-dot" />
           <span>{navText}</span>
+          <span className={`diff-badge diff-${displayDifficulty}`}>{displayDifficulty}</span>
+          <span className="topic-tag">{displayTopic}</span>
+          
         </div>
         <div className="nav-right">
+          <div className="timer-badge" aria-label={`Elapsed time ${elapsedLabel}`}>
+            <div className="timer-dot" />
+            <span className="timer-label">Elapsed</span>
+            <span>{elapsedLabel}</span>
+          </div>
           <div className="xp-bar-wrap">
             <span>XP</span>
             <div className="xp-bar" aria-hidden="true">

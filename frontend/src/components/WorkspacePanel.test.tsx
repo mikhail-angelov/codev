@@ -129,4 +129,38 @@ describe("WorkspacePanel", () => {
       }),
     ).toBeInTheDocument();
   });
+
+  it("renders examples and constraints after the editor section", () => {
+    const { container } = render(
+      <WorkspacePanel
+        summary={problem}
+        problem={problem}
+        loading={false}
+        error={null}
+        editorValue={"function twoSum(nums, target) {\n}"}
+        elapsedLabel="00:42"
+        canResetEditor={true}
+        canRunSampleTests={true}
+        canSubmitForReview={true}
+        sampleTestSummary={null}
+        onEditorChange={vi.fn()}
+        onResetEditor={vi.fn()}
+        onRunSampleTests={vi.fn()}
+        onSubmitForReview={vi.fn()}
+      />,
+    );
+
+    const editorSection = container.querySelector(".editor-section");
+    const examplesSection = container.querySelector(".examples-section");
+    const constraintsSection = container.querySelector(".constraints-section");
+
+    expect(editorSection).not.toBeNull();
+    expect(examplesSection).not.toBeNull();
+    expect(constraintsSection).not.toBeNull();
+    expect(
+      editorSection && examplesSection
+        ? editorSection.compareDocumentPosition(examplesSection) & Node.DOCUMENT_POSITION_FOLLOWING
+        : 0,
+    ).toBeTruthy();
+  });
 });
