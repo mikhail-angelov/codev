@@ -5,6 +5,7 @@ const nonEmptyString = z.string().trim().min(1);
 
 export const reviewResponseSchema = z
   .object({
+    isCorrect: z.boolean(),
     correctness: nonEmptyString,
     timeComplexity: nonEmptyString,
     spaceComplexity: nonEmptyString,

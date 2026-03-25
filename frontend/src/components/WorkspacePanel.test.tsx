@@ -26,7 +26,7 @@ describe("WorkspacePanel", () => {
   it("wires the action bar state and timer display", () => {
     const onResetEditor = vi.fn();
     const onRunSampleTests = vi.fn();
-    const onSubmitForReview = vi.fn();
+    const onPrimaryAction = vi.fn();
 
     render(
       <WorkspacePanel
@@ -38,15 +38,17 @@ describe("WorkspacePanel", () => {
         elapsedLabel="12:34"
         canResetEditor={true}
         canRunSampleTests={true}
-        canSubmitForReview={true}
+        canPrimaryAction={true}
+        primaryActionLabel="Submit & review"
         sampleTestSummary={null}
         onEditorChange={vi.fn()}
         onResetEditor={onResetEditor}
         onRunSampleTests={onRunSampleTests}
-        onSubmitForReview={onSubmitForReview}
+        onPrimaryAction={onPrimaryAction}
       />,
     );
 
+    expect(screen.getByRole("heading", { name: /two sum/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/Elapsed time 12:34/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /^Reset$/i }));
@@ -55,7 +57,7 @@ describe("WorkspacePanel", () => {
 
     expect(onResetEditor).toHaveBeenCalledTimes(1);
     expect(onRunSampleTests).toHaveBeenCalledTimes(1);
-    expect(onSubmitForReview).toHaveBeenCalledTimes(1);
+    expect(onPrimaryAction).toHaveBeenCalledTimes(1);
   });
 
   it("renders sample test results with pass/fail/error states", () => {
@@ -69,7 +71,8 @@ describe("WorkspacePanel", () => {
         elapsedLabel="00:42"
         canResetEditor={true}
         canRunSampleTests={true}
-        canSubmitForReview={true}
+        canPrimaryAction={true}
+        primaryActionLabel="Submit & review"
         sampleTestSummary={{
           scope: "visible-sample-tests",
           problemId: 1,
@@ -109,7 +112,7 @@ describe("WorkspacePanel", () => {
         onEditorChange={vi.fn()}
         onResetEditor={vi.fn()}
         onRunSampleTests={vi.fn()}
-        onSubmitForReview={vi.fn()}
+        onPrimaryAction={vi.fn()}
       />,
     );
 
@@ -141,12 +144,13 @@ describe("WorkspacePanel", () => {
         elapsedLabel="00:42"
         canResetEditor={true}
         canRunSampleTests={true}
-        canSubmitForReview={true}
+        canPrimaryAction={true}
+        primaryActionLabel="Submit & review"
         sampleTestSummary={null}
         onEditorChange={vi.fn()}
         onResetEditor={vi.fn()}
         onRunSampleTests={vi.fn()}
-        onSubmitForReview={vi.fn()}
+        onPrimaryAction={vi.fn()}
       />,
     );
 

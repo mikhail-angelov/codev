@@ -32,6 +32,7 @@ afterEach(() => {
 describe("AIThreadPanel", () => {
   it("renders mixed thread messages and the loading state", () => {
     const reviewMessage = createReviewThreadMessage({
+      isCorrect: true,
       correctness: "Looks correct.",
       timeComplexity: "O(n)",
       spaceComplexity: "O(1)",
@@ -171,6 +172,7 @@ describe("AIThreadPanel", () => {
   it("dispatches review usefulness feedback from the thread card", () => {
     const onReviewFeedback = vi.fn();
     const reviewMessage = createReviewThreadMessage({
+      isCorrect: true,
       correctness: "Looks correct.",
       timeComplexity: "O(n)",
       spaceComplexity: "O(1)",

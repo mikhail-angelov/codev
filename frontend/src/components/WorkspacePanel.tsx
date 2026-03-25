@@ -12,12 +12,14 @@ interface WorkspacePanelProps {
   elapsedLabel: string;
   canResetEditor: boolean;
   canRunSampleTests: boolean;
-  canSubmitForReview: boolean;
+  canPrimaryAction: boolean;
+  primaryActionLabel: string;
+  primaryActionTone?: "primary" | "success";
   sampleTestSummary: VisibleSampleTestExecutionSummary | null;
   onEditorChange: (value: string) => void;
   onResetEditor: () => void;
   onRunSampleTests: () => void;
-  onSubmitForReview: () => void;
+  onPrimaryAction: () => void;
 }
 
 function WorkspacePanel({
@@ -29,12 +31,14 @@ function WorkspacePanel({
   elapsedLabel,
   canResetEditor,
   canRunSampleTests,
-  canSubmitForReview,
+  canPrimaryAction,
+  primaryActionLabel,
+  primaryActionTone = "primary",
   sampleTestSummary,
   onEditorChange,
   onResetEditor,
   onRunSampleTests,
-  onSubmitForReview,
+  onPrimaryAction,
 }: WorkspacePanelProps) {
   const displayTitle = problem?.title ?? summary?.title ?? "Workspace Shell";
   const displayDifficulty =
@@ -55,6 +59,22 @@ function WorkspacePanel({
     <section className="workspace-shell ui-panel ui-panel--elevated">
       <div className="content-split">
         <div className="problem-body">
+          <div className="workspace-problem-header">
+            <div>
+              <h1 className="workspace-problem-title">{displayTitle}</h1>
+              {displayId !== null ? (
+                <div className="workspace-problem-meta">
+                  <span className={`diff-badge diff-${displayDifficulty}`}>{displayDifficulty}</span>
+                  <span className="topic-tag">{displayTopic}</span>
+                </div>
+              ) : null}
+            </div>
+            <div className="workspace-elapsed" aria-label={`Elapsed time ${elapsedLabel}`}>
+              <span className="workspace-elapsed-label">Elapsed time</span>
+              <span>{elapsedLabel}</span>
+            </div>
+          </div>
+
           {loading ? (
             <div className="workspace-state" role="status" aria-live="polite">
               Loading problem details...
@@ -106,12 +126,12 @@ function WorkspacePanel({
                 Run tests
               </button>
               <button
-                className="editor-btn ui-button ui-button--primary"
+                className={`editor-btn ui-button ${primaryActionTone === "success" ? "ui-button--success" : "ui-button--primary"}`}
                 type="button"
-                onClick={onSubmitForReview}
-                disabled={!canSubmitForReview}
+                onClick={onPrimaryAction}
+                disabled={!canPrimaryAction}
               >
-                Submit &amp; review
+                {primaryActionLabel}
               </button>
             </div>
           </div>

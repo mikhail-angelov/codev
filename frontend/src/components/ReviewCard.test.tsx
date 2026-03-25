@@ -9,6 +9,7 @@ describe("ReviewCard", () => {
         loading={false}
         error={null}
         review={{
+          isCorrect: true,
           correctness: "Use `Map` to track complements.",
           timeComplexity: "O(n)",
           spaceComplexity: "O(1)",
@@ -20,7 +21,8 @@ describe("ReviewCard", () => {
 
     expect(screen.getByText("Latest review")).toBeInTheDocument();
     expect(screen.getByText("Review ready")).toBeInTheDocument();
-    expect(screen.getByText("Complete", { selector: ".review-card-status" })).toBeInTheDocument();
+    expect(screen.getByText("Correct", { selector: ".review-card-status" })).toBeInTheDocument();
+    expect(screen.getByText("Correct solution")).toBeInTheDocument();
     expect(screen.getByText("Correctness")).toBeInTheDocument();
     expect(screen.getByText("Time complexity")).toBeInTheDocument();
     expect(screen.getByText("Space complexity")).toBeInTheDocument();
@@ -63,6 +65,7 @@ describe("ReviewCard", () => {
         usefulnessFeedback="up"
         onUsefulnessFeedback={onUsefulnessFeedback}
         review={{
+          isCorrect: true,
           correctness: "Strong answer.",
           timeComplexity: "O(n)",
           spaceComplexity: "O(1)",

@@ -54,6 +54,7 @@ describe("review endpoint", () => {
   it("returns a structured review for a valid request", async () => {
     const provider = makeAiProvider(
       JSON.stringify({
+        isCorrect: true,
         correctness: "The approach is correct for the given samples.",
         timeComplexity: "O(n)",
         spaceComplexity: "O(n)",
@@ -80,6 +81,7 @@ describe("review endpoint", () => {
     });
 
     expect(review).toEqual({
+      isCorrect: true,
       correctness: "The approach is correct for the given samples.",
       timeComplexity: "O(n)",
       spaceComplexity: "O(n)",
@@ -91,6 +93,7 @@ describe("review endpoint", () => {
   it("returns 404 when the problem does not exist", async () => {
     const provider = makeAiProvider(
       JSON.stringify({
+        isCorrect: false,
         correctness: "irrelevant",
         timeComplexity: "O(1)",
         spaceComplexity: "O(1)",

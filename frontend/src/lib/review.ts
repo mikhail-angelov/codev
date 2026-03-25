@@ -13,6 +13,7 @@ export interface ReviewRequest {
 }
 
 export interface ReviewResponse {
+  isCorrect: boolean;
   correctness: string;
   timeComplexity: string;
   spaceComplexity: string;

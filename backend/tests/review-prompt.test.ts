@@ -24,6 +24,7 @@ describe("review prompt", () => {
       }),
     );
     expect(payload.messages[0].content).toContain("correctness");
+    expect(payload.messages[0].content).toContain("isCorrect");
     expect(payload.messages[0].content).toContain("timeComplexity");
     expect(payload.messages[0].content).toContain("spaceComplexity");
     expect(payload.messages[0].content).toContain("followUp");
@@ -33,6 +34,7 @@ describe("review prompt", () => {
     expect(payload.messages[1].content).toContain("function twoSum(nums, target)");
     expect(payload.messages[1].content).toContain("Visible sample tests:");
     expect(payload.messages[1].content).toContain("Respond in a structured format");
+    expect(payload.messages[1].content).toContain('"isCorrect": boolean');
     expect(payload.messages[1].content).toContain('"improvements": [string]');
   });
 

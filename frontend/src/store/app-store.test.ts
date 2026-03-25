@@ -93,6 +93,7 @@ describe("app store", () => {
       timestamp: 1,
       usefulnessFeedback: null,
       review: {
+        isCorrect: true,
         correctness: "Looks good.",
         timeComplexity: "O(n)",
         spaceComplexity: "O(1)",

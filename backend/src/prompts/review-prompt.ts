@@ -100,7 +100,8 @@ export function buildReviewPrompt({
       "You are Codev's technical interview reviewer.",
       "Be direct, specific, and interview-style.",
       "Return a single valid JSON object only.",
-      "The JSON must include correctness, timeComplexity, spaceComplexity, improvements, and followUp.",
+      "The JSON must include isCorrect, correctness, timeComplexity, spaceComplexity, improvements, and followUp.",
+      "Set isCorrect to true only when the submitted solution is correct overall, not just partially correct.",
       "improvements must be an array with 1 to 2 concrete items.",
       "Do not wrap the JSON in markdown fences or prose.",
       "Avoid generic praise and do not mention policies or hidden reasoning.",
@@ -131,7 +132,7 @@ export function buildReviewPrompt({
     "5. Follow-up question",
     "",
     "Return JSON with this shape:",
-    '{ "correctness": string, "timeComplexity": string, "spaceComplexity": string, "improvements": [string], "followUp": string }',
+    '{ "isCorrect": boolean, "correctness": string, "timeComplexity": string, "spaceComplexity": string, "improvements": [string], "followUp": string }',
   );
 
   const userMessage: AiMessage = {

@@ -55,6 +55,13 @@ function ReviewBody({
 }) {
   return (
     <div className="review-card-body">
+      <div
+        className={`review-verdict review-verdict--${review.isCorrect ? "correct" : "incorrect"}`}
+        aria-label={review.isCorrect ? "Solution verdict: correct" : "Solution verdict: incorrect"}
+      >
+        <span className="review-verdict-label">Verdict</span>
+        <span className="review-verdict-value">{review.isCorrect ? "Correct solution" : "Not correct yet"}</span>
+      </div>
       <dl className="review-metrics">
         <div>
           <dt>Correctness</dt>
@@ -112,7 +119,16 @@ export function ReviewCard({
   onUsefulnessFeedback,
 }: ReviewCardProps) {
   const title = loading ? "Submitting..." : error ? "Review failed" : review ? "Review ready" : "Waiting for submission";
-  const statusLabel = loading ? "Loading" : error ? "Error" : review ? "Complete" : "Idle";
+  const statusLabel = loading ? "Loading" : error ? "Error" : review ? (review.isCorrect ? "Correct" : "Needs work") : "Idle";
+  const statusClassName = loading
+    ? "review-card-status--loading"
+    : error
+      ? "review-card-status--error"
+      : review
+        ? review.isCorrect
+          ? "review-card-status--success"
+          : "review-card-status--warning"
+        : "review-card-status--idle";
 
   return (
     <section className="review-card ui-card" aria-live="polite">
@@ -121,9 +137,7 @@ export function ReviewCard({
           <div className="review-card-label">Latest review</div>
           <div className="review-card-title">{title}</div>
         </div>
-        <div
-          className={`review-card-status ${loading ? "review-card-status--loading" : error ? "review-card-status--error" : "review-card-status--idle"}`}
-        >
+        <div className={`review-card-status ${statusClassName}`}>
           {statusLabel}
         </div>
       </div>

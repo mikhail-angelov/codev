@@ -87,6 +87,7 @@ const problemDetails: Record<number, ProblemDetailFixture> = {
 };
 
 const reviewResponseFixture = {
+  isCorrect: true,
   correctness: "Logic is sound for the provided examples.",
   timeComplexity: "O(n)",
   spaceComplexity: "O(n)",
@@ -284,7 +285,7 @@ describe("App problem list flow", () => {
     });
   });
 
-  it("preserves AI thread draft and sample test results per problem when switching", async () => {
+  it("clears the AI panel draft while keeping sample test results when switching problems", async () => {
     mockProblemRequests();
 
     const { container } = render(<App />);
@@ -308,7 +309,7 @@ describe("App problem list flow", () => {
     fireEvent.click(problemList.getAllByRole("button", { name: /two sum/i })[0]);
     expect(await app.findByRole("heading", { name: /two sum/i })).toBeInTheDocument();
     expect(await app.findByText("Latest sample test run")).toBeInTheDocument();
-    expect(app.getByPlaceholderText("Ask the interviewer anything...")).toHaveValue("Need help on Two Sum");
+    expect(app.getByPlaceholderText("Ask the interviewer anything...")).toHaveValue("");
   });
 
   it("renders the selected problem detail and updates when a problem is selected", async () => {
@@ -519,6 +520,7 @@ describe("App problem list flow", () => {
   it("appends each review to the AI thread when the user submits again", async () => {
     const reviewResponses = [
       {
+        isCorrect: true,
         correctness: "First review",
         timeComplexity: "O(n)",
         spaceComplexity: "O(1)",
@@ -526,6 +528,7 @@ describe("App problem list flow", () => {
         followUp: "First follow-up?",
       },
       {
+        isCorrect: true,
         correctness: "Second review",
         timeComplexity: "O(n log n)",
         spaceComplexity: "O(1)",
@@ -800,6 +803,71 @@ describe("App problem list flow", () => {
 
     expect(helpfulButton).toHaveAttribute("aria-pressed", "true");
     expect(notHelpfulButton).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("shows a correctness verdict and unlocks moving to the next task after a correct reviewed solution", async () => {
+    mockProblemRequests();
+
+    const { container } = render(<App />);
+    const appShells = container.querySelectorAll(".app-shell");
+    const appShell = appShells[appShells.length - 1] as HTMLElement;
+    const app = within(appShell);
+
+    await app.findByRole("heading", { name: /two sum/i });
+    await waitFor(() => {
+      expect(app.getAllByRole("button", { name: /^Run tests$/i }).at(-1)).not.toBeDisabled();
+    });
+
+    act(() => {
+      useAppStore.getState().setEditorValue(
+        1,
+        "function twoSum(nums, target) {\n  const seen = new Map();\n\n  for (let index = 0; index < nums.length; index += 1) {\n    const value = nums[index];\n    const complement = target - value;\n\n    if (seen.has(complement)) {\n      return [seen.get(complement), index];\n    }\n\n    seen.set(value, index);\n  }\n\n  return [];\n}",
+      );
+    });
+
+    fireEvent.click(app.getAllByRole("button", { name: /^Run tests$/i }).at(-1)!);
+    expect(await app.findByText("All passed")).toBeInTheDocument();
+
+    fireEvent.click(app.getAllByRole("button", { name: /^Submit & review$/i }).at(-1)!);
+    expect(await app.findByText("Correct solution")).toBeInTheDocument();
+
+    const nextTaskButton = app.getByRole("button", { name: /^Move to next task$/i });
+    expect(nextTaskButton).toHaveClass("ui-button--success");
+  });
+
+  it("moves to the next visible task and clears the right panel after a correct review", async () => {
+    mockProblemRequests();
+
+    const { container } = render(<App />);
+    const appShells = container.querySelectorAll(".app-shell");
+    const appShell = appShells[appShells.length - 1] as HTMLElement;
+    const app = within(appShell);
+
+    await app.findByRole("heading", { name: /two sum/i });
+    await waitFor(() => {
+      expect(app.getAllByRole("button", { name: /^Run tests$/i }).at(-1)).not.toBeDisabled();
+    });
+
+    fireEvent.click(app.getByRole("button", { name: /^Approach$/i }));
+    expect(await app.findByText(hintResponseFixture.hint)).toBeInTheDocument();
+
+    act(() => {
+      useAppStore.getState().setEditorValue(
+        1,
+        "function twoSum(nums, target) {\n  const seen = new Map();\n\n  for (let index = 0; index < nums.length; index += 1) {\n    const value = nums[index];\n    const complement = target - value;\n\n    if (seen.has(complement)) {\n      return [seen.get(complement), index];\n    }\n\n    seen.set(value, index);\n  }\n\n  return [];\n}",
+      );
+    });
+
+    fireEvent.click(app.getAllByRole("button", { name: /^Run tests$/i }).at(-1)!);
+    fireEvent.click(app.getAllByRole("button", { name: /^Submit & review$/i }).at(-1)!);
+    expect(await app.findByText("Correct solution")).toBeInTheDocument();
+
+    fireEvent.click(app.getByRole("button", { name: /^Move to next task$/i }));
+
+    expect(await app.findByRole("heading", { name: /longest substring without repeating characters/i })).toBeInTheDocument();
+    expect(app.queryByText(hintResponseFixture.hint)).not.toBeInTheDocument();
+    expect(app.queryByText("Correct solution")).not.toBeInTheDocument();
+    expect(app.getByText("AI interviewer is ready. Select a problem and start the loop.")).toBeInTheDocument();
   });
 
   it("shows chat errors when the follow-up request fails", async () => {

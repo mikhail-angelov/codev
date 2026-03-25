@@ -34,6 +34,7 @@ function createResponse() {
 function createSmokeAiProvider(): AiProvider {
   const responses = [
     JSON.stringify({
+      isCorrect: false,
       correctness: "Smoke review response",
       timeComplexity: "O(n)",
       spaceComplexity: "O(n)",
@@ -104,6 +105,7 @@ describe("backend smoke flows", () => {
       },
     );
     expect(review).toEqual({
+      isCorrect: false,
       correctness: "Smoke review response",
       timeComplexity: "O(n)",
       spaceComplexity: "O(n)",

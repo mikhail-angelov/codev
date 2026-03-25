@@ -95,6 +95,7 @@ Deliver the fastest way for a practicing engineer to get credible, conversationa
 - Reset action
 - Run sample tests action
 - Submit for AI review action
+- If visible sample tests pass and the review verdict is correct, the primary action switches to a green move-to-next-task CTA
 - Elapsed timer
 
 ### AI interviewer
@@ -117,6 +118,7 @@ Deliver the fastest way for a practicing engineer to get credible, conversationa
 ### Session behavior
 - Local-only client session state
 - Per-problem working state during the current session
+- The AI panel resets whenever the user switches to a different problem so each task starts with a clean review thread
 - No account system in MVP
 - No persistent history in MVP
 
@@ -148,6 +150,7 @@ Deliver the fastest way for a practicing engineer to get credible, conversationa
 - AI panel is always visible because feedback is the product’s core value
 - Keep the code editor minimal and distraction-light
 - AI responses should feel conversational, but remain structured and scannable
+- Review responses must include an explicit correct/incorrect verdict, not just explanatory text
 - Avoid gamification in MVP; prioritize usefulness over engagement mechanics
 
 ## 8. Technical architecture
@@ -218,6 +221,7 @@ A launchable MVP must support all of the following:
 - Run sample tests
 - Submit solution for AI review
 - Receive structured review result
+- See whether the submitted solution is correct and move directly to the next task when it is
 - Request multiple hint types
 - Ask free-form follow-up questions
 - Recover gracefully from API failures

@@ -37,6 +37,7 @@ describe("buildRecentChatMessages", () => {
   it("serializes review and hint messages for chat context", () => {
     const recentMessages = buildRecentChatMessages([
       createReviewThreadMessage({
+        isCorrect: true,
         correctness: "Looks correct.",
         timeComplexity: "O(n)",
         spaceComplexity: "O(1)",

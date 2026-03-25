@@ -64,6 +64,7 @@ function App() {
   const reviewRequestSequence = useRef<Record<number, number>>({});
   const hintRequestSequence = useRef<Record<number, number>>({});
   const chatRequestSequence = useRef<Record<number, number>>({});
+  const previousSelectedProblemId = useRef<number | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -100,6 +101,19 @@ function App() {
       controller.abort();
     };
   }, []);
+
+  useEffect(() => {
+    if (selectedProblemId === null) {
+      previousSelectedProblemId.current = null;
+      return;
+    }
+
+    if (previousSelectedProblemId.current !== selectedProblemId) {
+      resetThreadSession(selectedProblemId);
+    }
+
+    previousSelectedProblemId.current = selectedProblemId;
+  }, [resetThreadSession, selectedProblemId]);
 
   useEffect(() => {
     if (selectedProblemId === null) {
@@ -220,6 +234,20 @@ function App() {
   const editorValue = getEditorValueForProblem(editorValues, selectedProblemId, activeProblem);
   const elapsedLabel = formatElapsedTime(sessionStartedAt === null ? 0 : sessionNow - sessionStartedAt);
   const aiThreadBusy = threadLoadingState !== null;
+  const latestReviewMessage = [...threadMessages].reverse().find((message) => message.kind === "review") ?? null;
+  const allSampleTestsPassed =
+    sampleTestSummary !== null &&
+    sampleTestSummary.totalCount > 0 &&
+    sampleTestSummary.passedCount === sampleTestSummary.totalCount &&
+    sampleTestSummary.failedCount === 0 &&
+    sampleTestSummary.errorCount === 0 &&
+    sampleTestSummary.runtimeError === null;
+  const canMoveToNextTask = allSampleTestsPassed && latestReviewMessage?.review.isCorrect === true;
+  const visibleProblemIndex = visibleProblems.findIndex((problemItem) => problemItem.id === selectedProblemId);
+  const nextVisibleProblemId =
+    visibleProblemIndex >= 0 && visibleProblemIndex < visibleProblems.length - 1
+      ? visibleProblems[visibleProblemIndex + 1]?.id ?? null
+      : null;
   const sessionActionState = getProblemSessionActionState({
     activeProblem,
     editorValue,
@@ -310,6 +338,18 @@ function App() {
           setThreadLoadingState(problemId, null);
         }
       });
+  }
+
+  function handlePrimaryAction() {
+    if (canMoveToNextTask) {
+      if (nextVisibleProblemId !== null) {
+        setSelectedProblemId(nextVisibleProblemId);
+      }
+
+      return;
+    }
+
+    handleSubmitForReview();
   }
 
   function handleHintClick(mode: HintMode) {
@@ -467,12 +507,16 @@ function App() {
             elapsedLabel={elapsedLabel}
             canResetEditor={sessionActionState.canResetEditor}
             canRunSampleTests={sessionActionState.canRunSampleTests}
-            canSubmitForReview={sessionActionState.canSubmitForReview && !aiThreadBusy}
+            canPrimaryAction={
+              canMoveToNextTask ? nextVisibleProblemId !== null : sessionActionState.canSubmitForReview && !aiThreadBusy
+            }
+            primaryActionLabel={canMoveToNextTask ? "Move to next task" : "Submit & review"}
+            primaryActionTone={canMoveToNextTask ? "success" : "primary"}
             sampleTestSummary={sampleTestSummary}
             onEditorChange={handleEditorChange}
             onResetEditor={handleResetEditor}
             onRunSampleTests={handleRunSampleTests}
-            onSubmitForReview={handleSubmitForReview}
+            onPrimaryAction={handlePrimaryAction}
           />
         </main>
 
