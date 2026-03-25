@@ -2,6 +2,9 @@
 
 Codev is a technical interview preparation app focused on one core loop: pick a problem, solve it in the browser, run visible sample tests, and get structured AI feedback.
 
+<img width="1348" height="817" alt="image" src="https://github.com/user-attachments/assets/74730c10-e4f0-4b1c-be0c-216411ae0f4a" />
+
+[Live demo](https://codev.bconf.com/#/app)
 ## Structure
 
 - `frontend/`: React + TypeScript + Vite app
