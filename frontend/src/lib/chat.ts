@@ -1,6 +1,6 @@
 import type { AIThreadMessage } from "./ai-thread";
 
-const API_BASE = '/';
+const API_BASE = '';
 
 export interface ChatHistoryMessage {
   role: "user" | "assistant" | "system";

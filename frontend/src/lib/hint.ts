@@ -1,4 +1,4 @@
-const API_BASE = '/';
+const API_BASE = '';
 
 export type HintMode = "approach" | "complexity" | "edge-cases" | "explain-current-code";
 
