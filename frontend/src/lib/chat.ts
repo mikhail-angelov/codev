@@ -1,6 +1,6 @@
 import type { AIThreadMessage } from "./ai-thread";
 
-const API_BASE = (import.meta.env.VITE_API_URL ?? "/").replace(/\/$/, "");
+const API_BASE = '/';
 
 export interface ChatHistoryMessage {
   role: "user" | "assistant" | "system";

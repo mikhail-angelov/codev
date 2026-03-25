@@ -34,7 +34,7 @@ export interface ProblemDetail extends ProblemListItem {
   sampleTests: ProblemSampleTest[];
 }
 
-const API_BASE = (import.meta.env.VITE_API_URL ?? "/").replace(/\/$/, "");
+const API_BASE = '/';
 
 export async function loadProblemList(signal?: AbortSignal): Promise<ProblemListItem[]> {
   const response = await fetch(`${API_BASE}/problems`, { signal });

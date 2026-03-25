@@ -30,8 +30,6 @@ Run the frontend:
 npm run dev --prefix frontend
 ```
 
-The frontend uses `VITE_API_URL` and defaults to `http://localhost:3020`.
-
 ## Docker
 
 1. Copy `.env` to a real production env file and fill in the public API URL and DeepSeek key.

@@ -1,4 +1,4 @@
-const API_BASE = (import.meta.env.VITE_API_URL ?? "/").replace(/\/$/, "");
+const API_BASE = '/';
 
 export type HintMode = "approach" | "complexity" | "edge-cases" | "explain-current-code";
 
