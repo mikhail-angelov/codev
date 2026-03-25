@@ -240,7 +240,7 @@ describe("App problem list flow", () => {
     expect(workspace.getAllByRole("button", { name: /^Reset$/i })[0]).toBeDisabled();
     expect(workspace.getAllByRole("button", { name: /^Run tests$/i })[0]).toBeDisabled();
     expect(workspace.getAllByRole("button", { name: /^Submit & review$/i })[0]).toBeDisabled();
-    expect(workspace.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:00");
+    expect(screen.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:00");
   });
 
   it("keeps the action bar gated until a problem is ready and preserves timer state per problem", async () => {
@@ -262,26 +262,26 @@ describe("App problem list flow", () => {
     });
 
     await waitFor(() => {
-      expect(workspace.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:01");
+      expect(app.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:01");
     });
 
     fireEvent.click(problemList.getAllByRole("button", { name: /longest substring without repeating characters/i })[0]);
     expect(await app.findByText(problemDetails[15].description)).toBeInTheDocument();
-    expect(workspace.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:00");
+    expect(app.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:00");
 
     await new Promise((resolve) => {
       window.setTimeout(resolve, 1100);
     });
 
     await waitFor(() => {
-      expect(workspace.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:01");
+      expect(app.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:01");
     });
 
     fireEvent.click(problemList.getAllByRole("button", { name: /two sum/i })[0]);
     expect(await app.findByText(problemDetails[1].description)).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(workspace.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:02");
+      expect(app.getByLabelText(/Elapsed time/i)).toHaveTextContent("00:02");
     });
   });
 

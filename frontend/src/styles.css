@@ -686,7 +686,7 @@ textarea {
 .workspace-problem-title {
   margin: 0;
   font-family: var(--display);
-  font-size: 28px;
+  font-size: 14px;
   line-height: 1.05;
   color: var(--text-0);
 }
@@ -908,7 +908,7 @@ textarea {
 
 .editor-codemirror .cm-selectionBackground,
 .editor-codemirror .cm-content ::selection {
-  background: rgba(245, 166, 35, 0.22);
+
 }
 
 .sample-test-summary {

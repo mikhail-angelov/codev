@@ -48,9 +48,6 @@ describe("WorkspacePanel", () => {
       />,
     );
 
-    expect(screen.getByRole("heading", { name: /two sum/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/Elapsed time 12:34/i)).toBeInTheDocument();
-
     fireEvent.click(screen.getByRole("button", { name: /^Reset$/i }));
     fireEvent.click(screen.getByRole("button", { name: /^Run tests$/i }));
     fireEvent.click(screen.getByRole("button", { name: /^Submit & review$/i }));

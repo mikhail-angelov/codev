@@ -464,7 +464,7 @@ function App() {
         <div className="nav-sep" />
         <div className="nav-track">
           <div className="nav-track-dot" />
-          <span>{navText}</span>
+          <h1 className="workspace-problem-title">{navText}</h1>
           <span className={`diff-badge diff-${displayDifficulty}`}>{displayDifficulty}</span>
           <span className="topic-tag">{displayTopic}</span>
           

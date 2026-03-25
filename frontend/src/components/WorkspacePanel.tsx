@@ -59,22 +59,7 @@ function WorkspacePanel({
     <section className="workspace-shell ui-panel ui-panel--elevated">
       <div className="content-split">
         <div className="problem-body">
-          <div className="workspace-problem-header">
-            <div>
-              <h1 className="workspace-problem-title">{displayTitle}</h1>
-              {displayId !== null ? (
-                <div className="workspace-problem-meta">
-                  <span className={`diff-badge diff-${displayDifficulty}`}>{displayDifficulty}</span>
-                  <span className="topic-tag">{displayTopic}</span>
-                </div>
-              ) : null}
-            </div>
-            <div className="workspace-elapsed" aria-label={`Elapsed time ${elapsedLabel}`}>
-              <span className="workspace-elapsed-label">Elapsed time</span>
-              <span>{elapsedLabel}</span>
-            </div>
-          </div>
-
+          
           {loading ? (
             <div className="workspace-state" role="status" aria-live="polite">
               Loading problem details...
@@ -140,7 +125,7 @@ function WorkspacePanel({
               key={problem?.id ?? "default"}
               value={editorValue}
               height="100%"
-              theme="none"
+              theme="dark"
               extensions={[javascript({ jsx: false })]}
               aria-label="Code editor"
               onChange={onEditorChange}
