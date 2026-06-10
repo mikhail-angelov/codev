@@ -2,45 +2,28 @@ services:
   app:
     image: ghcr.io/mikhail-angelov/codev:latest
     container_name: codev
+    restart: unless-stopped
     env_file:
       - ./.env
     ports:
       - "127.0.0.1:3020:3020"
-    restart: unless-stopped
+    networks:
+      - proxy-net
+    labels:
+      monic.enabled: "true"
+      monic.check: "http"
+      monic.check_http_url: "https://codev.bconf.com"
+      monic.name: "codev.bconf.com"
+      redoproxy.enabled: "true"
+      redoproxy.domain: "codev.bconf.com"
+      redoproxy.port: 3020
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "5"
     command: npm start
-  monic-codev:
-    image: ghcr.io/mikhail-angelov/monic:latest
-    container_name: monic-codev
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    depends_on:
-      - app
-    env_file:
-      - ./.env
-    environment:
-      - MONIC_APP_NAME=codevMonitor
-
-      - MONIC_CHECK_SYSTEM_INTERVAL=60
-      - MONIC_CHECK_SYSTEM_CPU_THRESHOLD=80
-      - MONIC_CHECK_SYSTEM_MEMORY_THRESHOLD=85
-      - MONIC_CHECK_SYSTEM_DISK_THRESHOLD=90
-
-      - MONIC_CHECK_DOCKER_INTERVAL=60
-      - MONIC_CHECK_DOCKER_CONTAINERS=codev
-
-      - MONIC_CHECK_HTTP_INTERVAL=300
-      - MONIC_CHECK_HTTP_URL=https://codev.bconf.com
-      - MONIC_CHECK_HTTP_METHOD=GET
-      - MONIC_CHECK_HTTP_TIMEOUT=10
-      - MONIC_CHECK_HTTP_EXPECTED_STATUS=200
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
+  
+networks:
+  proxy-net:
+    external: true
